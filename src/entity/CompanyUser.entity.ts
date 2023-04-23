@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 
-export class StudentUser {
+export class CompanyUser {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -18,8 +18,14 @@ export class StudentUser {
     @Column({type: "varchar", length: 255, nullable: false})
     lastName: string;
 
+    @Column({type: "varchar", length: 255, nullable: false})
+    companyName: string;
+
     @Column({type: "varchar", length: 255, nullable: true})
     picture: string;
+
+    @Column({type: "varchar", length: 255, nullable: true})
+    companyPicture: string;
 
     @Column({default: true})
     isActive: boolean;
