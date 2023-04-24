@@ -6,9 +6,4 @@ import { Get } from '@nestjs/common';
 @Controller('api/student')
 export class StudentController {
     constructor(private readonly studentService: StudentService) {}
-
-    @Get()
-    async findAll(): Promise<StudentUser[]> {
-        return this.studentService.findAll();
-    }
 }
