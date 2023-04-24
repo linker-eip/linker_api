@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from 'db/data-source';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -15,8 +15,10 @@ import { ConfigModule } from '@nestjs/config';
               secret: process.env.JWT_SECRET,
               signOptions: { expiresIn: '1d' }
             }),
+            AuthModule,
+            StudentModule,
             ],
-  controllers: [AppController],
-  providers: [AppService, JwtStrategy],
+  controllers: [],
+  providers: [JwtStrategy],
 })
 export class AppModule {}
