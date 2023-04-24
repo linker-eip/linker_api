@@ -8,6 +8,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginStudentDto } from './dto/login-student.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { LoginStudentResponseDto } from './dto/login-student-response.dto';
 
 @Controller('api/student')
 @ApiTags('Student AUTH')
@@ -22,7 +23,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Student login',
-    type: LoginStudentDto,
+    type: LoginStudentResponseDto,
   })
   async loginStudent(@Body() loginStudentDto: LoginStudentDto) {
     const student = await this.authService.loginStudent(loginStudentDto);
