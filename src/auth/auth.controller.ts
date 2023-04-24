@@ -26,10 +26,10 @@ export class AuthController {
     type: LoginStudentResponseDto,
   })
   async loginStudent(@Body() loginStudentDto: LoginStudentDto) {
-    const student = await this.authService.loginStudent(loginStudentDto);
-    if (!student) {
+    const token = await this.authService.loginStudent(loginStudentDto);
+    if (!token) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-    return student;
+    return token;
   }
 }
