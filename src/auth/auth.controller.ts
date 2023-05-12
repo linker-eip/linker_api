@@ -10,13 +10,15 @@ import { LoginStudentDto } from './dto/login-student.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginStudentResponseDto } from './dto/login-student-response.dto';
 import { RegisterStudentDto } from './dto/register-student.dto';
+import { LoginCompanyDto } from './dto/login-company.dto';
+import { LoginCompanyResponseDto } from './dto/login-company-response.dto';
 
-@Controller('api/student')
-@ApiTags('Student AUTH')
+@Controller('api/auth')
+@ApiTags('AUTH')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post('student/register')
   @ApiOperation({
     description: 'Student register',
     summary: 'Allow student to create an account',
@@ -34,7 +36,7 @@ export class AuthController {
     return token;
   }
 
-  @Post('login')
+  @Post('student/login')
   @ApiOperation({
     description: 'Student login',
     summary: 'Student login',
@@ -51,4 +53,23 @@ export class AuthController {
     }
     return token;
   }
+
+  @Post('company/login')
+  @ApiOperation({
+    description: 'Company login',
+    summary: 'Company login',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Company login',
+    type: LoginCompanyResponseDto,
+  })
+  async loginCompany(@Body() loginCompanyDto: LoginCompanyDto) {
+    const token = await this.authService.loginCompany(loginCompanyDto);
+    if (!token) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+    return token;
+  }
+  
 }

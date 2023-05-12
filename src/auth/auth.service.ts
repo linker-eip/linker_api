@@ -6,11 +6,16 @@ import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 import { StudentUser } from 'src/entity/StudentUser.entity';
 import * as bcrypt from 'bcrypt';
+import { LoginCompanyDto } from './dto/login-company.dto';
+import { CompanyService } from 'src/company/company.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly studentService: StudentService,
-              private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly studentService: StudentService,
+    private readonly jwtService: JwtService,
+    private readonly companyService: CompanyService
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt();
@@ -20,13 +25,13 @@ export class AuthService {
   async registerStudent(registerStudentDto: RegisterStudentDto) {
     const { email, password, firstName, lastName } = registerStudentDto;
 
-    const existingUser = await this.studentService.findOne( email );
+    const existingUser = await this.studentService.findOne(email);
 
     if (existingUser) {
-      return {error : "User with email " + email + " already exists"};
+      return { error: 'User with email ' + email + ' already exists' };
     }
 
-    const newUser = new StudentUser;
+    const newUser = new StudentUser();
     newUser.email = email;
     newUser.password = await this.hashPassword(password);
     newUser.firstName = firstName;
@@ -47,6 +52,16 @@ export class AuthService {
       return { token };
     }
 
+    return null;
+  }
+
+  async loginCompany(loginCompanyDto: LoginCompanyDto) {
+    const company = await this.companyService.findOne(loginCompanyDto.email);
+
+    if (company && company.password === loginCompanyDto.password) {
+      const token = jwt.sign({ email: company.email }, process.env.JWT_SECRET);
+      return { token };
+    }
     return null;
   }
 }
