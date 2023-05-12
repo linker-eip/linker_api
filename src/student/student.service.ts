@@ -17,4 +17,8 @@ export class StudentService {
     async findOne(email: string): Promise<StudentUser | undefined> {
         return this.studentRepository.findOne({where: {email}});
     }
+
+    async save(student: StudentUser): Promise<StudentUser> {
+        return this.studentRepository.save(student);
+    }
 }
