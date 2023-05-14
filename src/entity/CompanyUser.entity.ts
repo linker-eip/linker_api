@@ -19,13 +19,10 @@ export class CompanyUser {
   password: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  firstName: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  lastName: string;
-
-  @Column({ type: 'varchar', length: 255, nullable: false })
   companyName: string;
+
+  @Column({ type: 'varchar', length: 13, nullable: false})
+  phoneNumber: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   picture: string;

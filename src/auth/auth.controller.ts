@@ -12,6 +12,8 @@ import { LoginStudentResponseDto } from './dto/login-student-response.dto';
 import { RegisterStudentDto } from './dto/register-student.dto';
 import { LoginCompanyDto } from './dto/login-company.dto';
 import { LoginCompanyResponseDto } from './dto/login-company-response.dto';
+import { RegisterCompanyResponseDto } from './dto/register-company-response.dto';
+import { RegisterCompanyDto } from './dto/register-company.dto';
 
 @Controller('api/auth')
 @ApiTags('AUTH')
@@ -30,6 +32,24 @@ export class AuthController {
   })
   async registerStudent(@Body() registerStudentDto: RegisterStudentDto) {
     const token = await this.authService.registerStudent(registerStudentDto);
+    if (!token) {
+      throw new HttpException('Invalid informations', HttpStatus.UNAUTHORIZED);
+    }
+    return token;
+  }
+
+  @Post('company/register')
+  @ApiOperation({
+    description: 'Company register',
+    summary: 'Allow a company to create an account',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Company registered',
+    type: RegisterCompanyResponseDto,
+  })
+  async registerCompany(@Body() registerCompanyDto: RegisterCompanyDto) {
+    const token = await this.authService.registerCompany(registerCompanyDto);
     if (!token) {
       throw new HttpException('Invalid informations', HttpStatus.UNAUTHORIZED);
     }

@@ -8,6 +8,8 @@ import { StudentUser } from 'src/entity/StudentUser.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginCompanyDto } from './dto/login-company.dto';
 import { CompanyService } from 'src/company/company.service';
+import { RegisterCompanyDto } from './dto/register-company.dto';
+import { CompanyUser } from 'src/entity/CompanyUser.entity';
 
 @Injectable()
 export class AuthService {
@@ -38,6 +40,28 @@ export class AuthService {
     newUser.lastName = lastName;
 
     const savedUser = await this.studentService.save(newUser);
+
+    const token = jwt.sign({ email: savedUser.email }, process.env.JWT_SECRET);
+
+    return { token };
+  }
+
+  async registerCompany(registerCompanyDto: RegisterCompanyDto) {
+    const { email, password, name, phoneNumber} = registerCompanyDto;
+
+    const existingUser = await this.companyService.findOne(email);
+
+    if (existingUser) {
+      return { error: 'User with email ' + email + ' already exists' };
+    }
+
+    const newUser = new CompanyUser();
+    newUser.email = email;
+    newUser.password = await this.hashPassword(password);
+    newUser.companyName = name;
+    newUser.phoneNumber = phoneNumber;
+
+    const savedUser = await this.companyService.save(newUser);
 
     const token = jwt.sign({ email: savedUser.email }, process.env.JWT_SECRET);
 

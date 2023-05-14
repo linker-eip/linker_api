@@ -11,11 +11,15 @@ export class CompanyService {
         @InjectRepository(CompanyUser)
         private companyRepository: Repository<CompanyUser>,
         @InjectRepository(CompanyProfile)
-        private companyProfileRepository: Repository<CompanyProfile>
+        private companyProfileRepository: Repository<CompanyProfile>,
         ) {}
 
     async findAll(): Promise<CompanyUser[]> {
         return this.companyRepository.find();
+    }
+
+    async save(company: CompanyUser): Promise<CompanyUser> {
+        return this.companyRepository.save(company);
     }
 
     async findOne(email: string): Promise<CompanyUser | undefined> {
