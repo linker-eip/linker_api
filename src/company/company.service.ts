@@ -26,6 +26,10 @@ export class CompanyService {
         return this.companyRepository.findOne({where: {email}});
     }
 
+    async findOneByPhoneNumber(phoneNumber: string): Promise<CompanyUser | undefined> {
+        return this.companyRepository.findOne({where: {phoneNumber}});
+    }
+
     async CreateCompanyProfile(companyProfileDto: CreateCompanyProfileDto): Promise<CompanyProfile>
     {
         const CompanyProfileObj = new CompanyProfile();

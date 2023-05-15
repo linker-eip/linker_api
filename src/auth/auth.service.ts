@@ -49,10 +49,12 @@ export class AuthService {
   async registerCompany(registerCompanyDto: RegisterCompanyDto) {
     const { email, password, name, phoneNumber} = registerCompanyDto;
 
-    const existingUser = await this.companyService.findOne(email);
-
-    if (existingUser) {
+    if (await this.companyService.findOne(email)) {
       return { error: 'User with email ' + email + ' already exists' };
+    }
+
+    if (await this.companyService.findOneByPhoneNumber(phoneNumber)) {
+      return { error: 'User with number ' + phoneNumber + ' already exists' };
     }
 
     const newUser = new CompanyUser();
