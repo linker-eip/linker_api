@@ -8,20 +8,20 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { StudentModule } from './student/student.module';
 import { CompanyModule } from './company/company.module';
-import * as dotenv from 'dotenv';
 
 @Module({
-  imports: [ConfigModule.forRoot(),
-            TypeOrmModule.forRoot(dataSourceOptions),
-            JwtModule.register({
-              secret: process.env.JWT_SECRET,
-              signOptions: { expiresIn: '1d' }
-            }),
-            AuthModule,
-            StudentModule,
-            PassportModule.register({defaultStrategy: 'jwt'}),
-            CompanyModule,
-            ],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot(dataSourceOptions),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
+    }),
+    AuthModule,
+    StudentModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    CompanyModule,
+  ],
   controllers: [],
   providers: [JwtStrategy],
 })
