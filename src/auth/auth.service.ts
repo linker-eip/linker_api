@@ -16,7 +16,7 @@ export class AuthService {
   constructor(
     private readonly studentService: StudentService,
     private readonly jwtService: JwtService,
-    private readonly companyService: CompanyService
+    private readonly companyService: CompanyService,
   ) {}
 
   async hashPassword(password: string): Promise<string> {
@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   async registerCompany(registerCompanyDto: RegisterCompanyDto) {
-    const { email, password, name, phoneNumber} = registerCompanyDto;
+    const { email, password, name, phoneNumber } = registerCompanyDto;
 
     if (await this.companyService.findOne(email)) {
       return { error: 'User with email ' + email + ' already exists' };
