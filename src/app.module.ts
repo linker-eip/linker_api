@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { StudentModule } from './student/student.module';
 import { CompanyModule } from './company/company.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CompanyModule } from './company/company.module';
     StudentModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     CompanyModule,
+    MailModule,
   ],
   controllers: [],
   providers: [JwtStrategy],
