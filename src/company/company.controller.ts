@@ -39,7 +39,6 @@ export class CompanyController {
     @Req() req,
     @Body() CreateCompanyProfile: CreateCompanyProfileDto,
   ) {
-    console.log(CreateCompanyProfile);
     return this.companyService.updateCompanyProfile(
       CreateCompanyProfile,
       req.user.email,
