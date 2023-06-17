@@ -121,12 +121,12 @@ export class AuthService {
     } catch (e) {
       return {error: "Invalid token"}
     }
-
-    const userinfos = await axios.get("https://oauth2.googleapis.com/tokeninfo?id_token=" + tokens.id_token)
+    const userinfos = await axios.get("https://oauth2.googleapis.com/tokeninfo?id_token=" +  tokens.tokens.id_token)
     const existingUser = await this.studentService.findOne(userinfos.data.email);
 
     if (existingUser) {
-      return { error: 'User with email ' + userinfos.data.email + ' already exists' };
+      const token = jwt.sign({ email: existingUser.email }, process.env.JWT_SECRET);
+      return { token };
     } else {
 
       const newUser = new StudentUser();
