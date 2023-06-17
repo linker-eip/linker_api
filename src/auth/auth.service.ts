@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
 import { LoginStudentDto } from './dto/login-student.dto';
 import { RegisterStudentDto } from './dto/register-student.dto';
 import { StudentService } from 'src/student/student.service';
@@ -10,6 +10,11 @@ import { LoginCompanyDto } from './dto/login-company.dto';
 import { CompanyService } from 'src/company/company.service';
 import { RegisterCompanyDto } from './dto/register-company.dto';
 import { CompanyUser } from 'src/entity/CompanyUser.entity';
+import { GoogleLoginDto } from './dto/google-login.dto';
+import { google } from 'googleapis'
+import { env } from 'process';
+import axios from 'axios';
+import { oauth2 } from 'googleapis/build/src/apis/oauth2';
 
 @Injectable()
 export class AuthService {
@@ -89,5 +94,52 @@ export class AuthService {
       return { token };
     }
     return null;
+  }
+
+  async googleLogin(googleLoginDto: GoogleLoginDto) {
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      "https://localhost:8080/test"
+    )
+  
+// Generate Oauth2 Link (Keeping for later use)
+   // const scopes = [
+   //   "https://www.googleapis.com/auth/userinfo.email",
+   //   "https://www.googleapis.com/auth/userinfo.profile"
+   // ]
+   // const authorizationUrl = oauth2Client.generateAuthUrl({
+   //   access_type: 'offline',
+   //   scope: scopes,
+   //   include_granted_scopes: true
+   // });
+   // console.log(authorizationUrl)
+
+    let tokens
+    try {
+      tokens = await oauth2Client.getToken(googleLoginDto.code)
+    } catch (e) {
+      return {error: "Invalid token"}
+    }
+
+    const userinfos = await axios.get("https://oauth2.googleapis.com/tokeninfo?id_token=" + tokens.id_token)
+    const existingUser = await this.studentService.findOne(userinfos.data.email);
+
+    if (existingUser) {
+      return { error: 'User with email ' + userinfos.data.email + ' already exists' };
+    } else {
+
+      const newUser = new StudentUser();
+      newUser.email = userinfos.data.email;
+      newUser.password = await this.hashPassword(tokens.id_token);
+      newUser.firstName = userinfos.data.given_name;
+      newUser.lastName = userinfos.data.family_name;
+
+      const savedUser = await this.studentService.save(newUser);
+
+      const token = jwt.sign({ email: savedUser.email }, process.env.JWT_SECRET);
+
+      return { token };
+    }
   }
 }
