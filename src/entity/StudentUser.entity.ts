@@ -29,4 +29,7 @@ export class StudentUser {
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date
+
+    @Column({ type: 'varchar', nullable: true})
+    resetPasswordToken: string;
 }
