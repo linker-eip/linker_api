@@ -4,6 +4,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateCompanyProfileDto } from './dto/create-company-profile.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CompanyProfileResponseDto } from './dto/company-profile-response.dto';
+import { ForgetCompanyPasswordDto} from './dto/forget-company-password.dto';
+import { ResetCompanyPasswordDto } from './dto/reset-company-password.dto';
 
 @Controller('api/company')
 @UseGuards(AuthGuard('jwt'))
@@ -43,5 +45,32 @@ export class CompanyController {
       CreateCompanyProfile,
       req.user.email,
     );
+  }
+
+  @Post('forgot-password')
+  @ApiOperation({
+    description: 'Forgot password',
+    summary: 'Forgot password',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Forgot password',
+  })
+  async forgotPassword(@Req() req, @Body() body: ForgetCompanyPasswordDto) {
+    return this.companyService.generateResetPassword(body);
+  }
+
+  @Post('reset-password')
+  @ApiOperation({
+    description: 'Reset password',
+    summary: 'Reset password',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset password',
+    type: CompanyProfileResponseDto,
+  })
+  async resetPassword(@Req() req, @Body() body: ResetCompanyPasswordDto) {
+    return this.companyService.resetPassword(body);
   }
 }

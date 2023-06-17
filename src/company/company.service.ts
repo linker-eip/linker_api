@@ -4,6 +4,10 @@ import { CompanyProfile } from 'src/entity/CompanyProfile.entity';
 import { CompanyUser } from 'src/entity/CompanyUser.entity';
 import { Repository } from 'typeorm';
 import { CreateCompanyProfileDto } from './dto/create-company-profile.dto';
+import { ForgetCompanyPasswordDto } from './dto/forget-company-password.dto';
+import { MailService } from 'src/mail/mail.service';
+import { SendMailDto } from 'src/mail/dto/send-mail.dto';
+import { ResetCompanyPasswordDto } from './dto/reset-company-password.dto';
 
 @Injectable()
 export class CompanyService {
@@ -12,6 +16,7 @@ export class CompanyService {
     private companyRepository: Repository<CompanyUser>,
     @InjectRepository(CompanyProfile)
     private companyProfileRepository: Repository<CompanyProfile>,
+    private readonly mailService: MailService,
   ) {}
 
   async findAll(): Promise<CompanyUser[]> {
