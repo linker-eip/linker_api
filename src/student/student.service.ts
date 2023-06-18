@@ -5,20 +5,28 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class StudentService {
-    constructor(
-        @InjectRepository(StudentUser)
-        private studentRepository: Repository<StudentUser>,
-    ) {}
+  constructor(
+    @InjectRepository(StudentUser)
+    private studentRepository: Repository<StudentUser>,
+  ) {}
 
-    async findAll(): Promise<StudentUser[]> {
-        return this.studentRepository.find();
-    }
+  async findAll(): Promise<StudentUser[]> {
+    return this.studentRepository.find();
+  }
 
-    async findOne(email: string): Promise<StudentUser | undefined> {
-        return this.studentRepository.findOne({where: {email}});
-    }
+  async findOne(email: string): Promise<StudentUser | undefined> {
+    return this.studentRepository.findOne({ where: { email } });
+  }
 
-    async save(student: StudentUser): Promise<StudentUser> {
-        return this.studentRepository.save(student);
-    }
+  async save(student: StudentUser): Promise<StudentUser> {
+    return this.studentRepository.save(student);
+  }
+
+  async findOneByResetPasswordToken(
+    token: string,
+  ): Promise<StudentUser | undefined> {
+    return this.studentRepository.findOne({
+      where: { resetPasswordToken: token },
+    });
+  }
 }

@@ -21,7 +21,7 @@ export class CompanyUser {
   @Column({ type: 'varchar', length: 255, nullable: false })
   companyName: string;
 
-  @Column({ type: 'varchar', length: 13, nullable: false})
+  @Column({ type: 'varchar', length: 13, nullable: false })
   phoneNumber: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -44,4 +44,7 @@ export class CompanyUser {
   })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
   profile: CompanyProfile;
+
+  @Column({ type: 'varchar', nullable: true })
+  resetPasswordToken: string;
 }

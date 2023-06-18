@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateCompanyProfileDto } from './dto/create-company-profile.dto';
@@ -39,7 +39,6 @@ export class CompanyController {
     @Req() req,
     @Body() CreateCompanyProfile: CreateCompanyProfileDto,
   ) {
-    console.log(CreateCompanyProfile);
     return this.companyService.updateCompanyProfile(
       CreateCompanyProfile,
       req.user.email,
