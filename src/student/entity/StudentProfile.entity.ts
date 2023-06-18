@@ -1,13 +1,14 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { CompanyUser } from './CompanyUser.entity';
+import { CompanyUser } from '../../entity/CompanyUser.entity';
+import { StudentUser } from './StudentUser.entity';
 
 @Entity()
-export class CompanyProfile {
+export class StudentProfile {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  companyId: number;
+  studentId: number;
 
   @Column({ nullable: true })
   name: string;
@@ -22,25 +23,19 @@ export class CompanyProfile {
   phone: string;
 
   @Column({ nullable: true })
-  address: string;
-
-  @Column({ nullable: true })
-  size: number;
-
-  @Column({ nullable: true })
   location: string;
 
   @Column({ nullable: true })
-  activity: string;
+  studies: string;
 
   @Column({ nullable: true })
-  speciality: string;
+  skills: string;
 
   @Column({ nullable: true })
   website: string;
 
   @OneToOne(() => CompanyUser)
   @JoinColumn({ name: 'companyId' })
-  company: CompanyUser;
+  student: StudentUser;
 }
 
