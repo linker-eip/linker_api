@@ -14,6 +14,10 @@ import { LoginCompanyDto } from './dto/login-company.dto';
 import { LoginCompanyResponseDto } from './dto/login-company-response.dto';
 import { RegisterCompanyResponseDto } from './dto/register-company-response.dto';
 import { RegisterCompanyDto } from './dto/register-company.dto';
+import { ForgetPasswordDto } from 'src/auth/dto/forget-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ForgetPasswordResponseDto } from './dto/forget-password-response.dto';
+import { ResetPasswordResponseDto } from './dto/reset-password-response.dto';
 
 @Controller('api/auth')
 @ApiTags('AUTH')
@@ -92,4 +96,59 @@ export class AuthController {
     return token;
   }
   
+  @Post('company/forgot-password')
+  @ApiOperation({
+    description: 'Forgot company password',
+    summary: 'Forgot company password',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Forgot company password',
+    type: ForgetPasswordResponseDto
+  })
+  async forgotPassword(@Body() body: ForgetPasswordDto) {
+    return this.authService.generateCompanyResetPassword(body);
+  }
+
+  @Post('company/reset-password')
+  @ApiOperation({
+    description: 'Reset company password',
+    summary: 'Reset company password',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset company password',
+    type: ResetPasswordResponseDto
+  })
+  async resetPassword(@Body() body: ResetPasswordDto) {
+    return this.authService.resetCompanyPassword(body);
+  }
+
+  @Post('student/forgot-password')
+  @ApiOperation({
+    description: 'Forgot student password',
+    summary: 'Forgot student password',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Forgot student password',
+    type: ForgetPasswordResponseDto
+  })
+  async forgotPasswordStudent(@Body() body: ForgetPasswordDto) {
+    return this.authService.generateStudentResetPassword(body);
+  }
+
+  @Post('student/reset-password')
+  @ApiOperation({
+    description: 'Reset student password',
+    summary: 'Reset student password',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset student password',
+    type: ResetPasswordResponseDto
+  })
+  async resetPasswordStudent(@Body() body: ResetPasswordDto) {
+    return this.authService.resetStudentPassword(body);
+  }
 }

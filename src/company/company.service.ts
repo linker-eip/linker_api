@@ -4,10 +4,6 @@ import { CompanyProfile } from 'src/entity/CompanyProfile.entity';
 import { CompanyUser } from 'src/entity/CompanyUser.entity';
 import { Repository } from 'typeorm';
 import { CreateCompanyProfileDto } from './dto/create-company-profile.dto';
-import { ForgetCompanyPasswordDto } from './dto/forget-company-password.dto';
-import { MailService } from 'src/mail/mail.service';
-import { SendMailDto } from 'src/mail/dto/send-mail.dto';
-import { ResetCompanyPasswordDto } from './dto/reset-company-password.dto';
 
 @Injectable()
 export class CompanyService {
@@ -16,7 +12,6 @@ export class CompanyService {
     private companyRepository: Repository<CompanyUser>,
     @InjectRepository(CompanyProfile)
     private companyProfileRepository: Repository<CompanyProfile>,
-    private readonly mailService: MailService,
   ) {}
 
   async findAll(): Promise<CompanyUser[]> {
@@ -35,6 +30,14 @@ export class CompanyService {
     phoneNumber: string,
   ): Promise<CompanyUser | undefined> {
     return this.companyRepository.findOne({ where: { phoneNumber } });
+  }
+
+  async findOneByResetPasswordToken(
+    token : string,
+  ): Promise<CompanyUser | undefined> {
+    return this.companyRepository.findOne({
+      where: { resetPasswordToken: token },
+    });
   }
 
   async CreateCompanyProfile(
@@ -76,38 +79,5 @@ export class CompanyService {
     companyProfile.speciality = CreateCompanyProfileDto.speciality;
     companyProfile.website = CreateCompanyProfileDto.website;
     return this.companyProfileRepository.save(companyProfile);
-  }
-
-  async generateResetPassword(body: ForgetCompanyPasswordDto): Promise<String> {
-    const company = await this.companyRepository.findOne({
-      where: { email: body.email },
-    });
-    const randomString = [...Array(16)]
-      .map(() => Math.random().toString(36)[2])
-      .join('');
-    company.resetPasswordToken = randomString;
-    const emailBody =
-      'Voici votre clé pour réinitialiser votre mot de passe : ' + randomString;
-    const emailSubject = 'Réinitialisation de mot de passe';
-
-    const sendMailDto = new SendMailDto();
-    sendMailDto.to = company.email;
-    sendMailDto.subject = emailSubject;
-    sendMailDto.text = emailBody;
-    this.mailService.sendMail(sendMailDto);
-    await this.companyRepository.save(company);
-    return company.resetPasswordToken;
-  }
-
-  async resetPassword(body: ResetCompanyPasswordDto): Promise<CompanyUser> {
-    const company = await this.companyRepository.findOne({
-      where: { resetPasswordToken: body.token },
-    });
-    if (!company) {
-      throw new Error('Token invalide');
-    }
-    company.password = body.password;
-    company.resetPasswordToken = null;
-    return this.companyRepository.save(company);
   }
 }

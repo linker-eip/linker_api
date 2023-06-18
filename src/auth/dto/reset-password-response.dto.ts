@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class ForgetCompanyPasswordDto {
+export class ResetPasswordResponseDto {
     @ApiProperty()
-    email: string;
+    message: string;
 }
