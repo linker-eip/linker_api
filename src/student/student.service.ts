@@ -22,10 +22,6 @@ export class StudentService {
     return this.studentRepository.findOne({ where: { email } });
   }
 
-  async save(student: StudentUser): Promise<StudentUser> {
-    return this.studentRepository.save(student);
-  }
-
   async findOneByResetPasswordToken(
     token: string,
   ): Promise<StudentUser | undefined> {
