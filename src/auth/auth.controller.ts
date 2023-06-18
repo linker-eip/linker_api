@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginStudentDto } from './dto/login-student.dto';
@@ -14,6 +15,7 @@ import { LoginCompanyDto } from './dto/login-company.dto';
 import { LoginCompanyResponseDto } from './dto/login-company-response.dto';
 import { RegisterCompanyResponseDto } from './dto/register-company-response.dto';
 import { RegisterCompanyDto } from './dto/register-company.dto';
+import { GoogleLoginDto } from './dto/google-login.dto';
 
 @Controller('api/auth')
 @ApiTags('AUTH')
@@ -91,5 +93,12 @@ export class AuthController {
     }
     return token;
   }
-  
+
+  @Post('student/google-login')
+  @ApiOperation({summary: 'Login a user using Google OAuth'})
+  async googleLogin(@Body() body: GoogleLoginDto) {
+      if (!body.code)
+          throw new HttpException("code is required", HttpStatus.BAD_REQUEST)
+      return this.authService.googleLogin(body);
+  }
 }
