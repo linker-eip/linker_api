@@ -152,6 +152,7 @@ export class AuthController {
   })
   async resetPasswordStudent(@Body() body: ResetPasswordDto) {
     return this.authService.resetStudentPassword(body);
+  }
 
   @Post('student/google-login')
   @ApiOperation({summary: 'Login a user using Google OAuth'})
