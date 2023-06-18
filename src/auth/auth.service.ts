@@ -4,7 +4,6 @@ import { RegisterStudentDto } from './dto/register-student.dto';
 import { StudentService } from 'src/student/student.service';
 import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
-import { StudentUser } from 'src/entity/StudentUser.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginCompanyDto } from './dto/login-company.dto';
 import { CompanyService } from 'src/company/company.service';
@@ -19,6 +18,7 @@ import { google } from 'googleapis'
 import { env } from 'process';
 import axios from 'axios';
 import { oauth2 } from 'googleapis/build/src/apis/oauth2';
+import { StudentUser } from 'src/student/entity/StudentUser.entity';
 
 @Injectable()
 export class AuthService {
