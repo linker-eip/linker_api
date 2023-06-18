@@ -1,9 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CompanyUser } from './CompanyUser.entity';
 
 @Entity()
 export class CompanyProfile {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  companyId: number;
 
   @Column({ nullable: true })
   name: string;
@@ -34,5 +38,9 @@ export class CompanyProfile {
 
   @Column({ nullable: true })
   website: string;
+
+  @OneToOne(() => CompanyUser)
+  @JoinColumn({ name: 'companyId' })
+  company: CompanyUser;
 }
 

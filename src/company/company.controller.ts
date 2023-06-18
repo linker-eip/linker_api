@@ -41,7 +41,7 @@ export class CompanyController {
   ) {
     return this.companyService.updateCompanyProfile(
       CreateCompanyProfile,
-      req.user.email,
+      req.user
     );
   }
 }
