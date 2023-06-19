@@ -30,7 +30,8 @@ RUN yarn install --production
 COPY --from=builder /app/dist ./dist
 
 # Expose port 8080
-EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
 
 # Run the app
 CMD [ "node", "dist/src/main.js" ]
