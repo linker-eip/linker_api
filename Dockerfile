@@ -1,30 +1,36 @@
-# Etape 1 : Construire l'application
 FROM node:lts as builder
 
-# Créer le répertoire de l'application
+# Create app directory
 WORKDIR /app
 
-# Copier les fichiers de l'application
+# Copy app files
 COPY . .
 
-# Installer les dépendances de l'application
+# Install app dependencies
 RUN yarn install
 
-# Construire l'application
+# Build the app
 RUN yarn build
 
-# Etape 2 : Préparer l'image de NGINX
-FROM nginx:stable-alpine
+FROM node:lts-slim
 
-# Copier l'application construite à partir de l'étape de construction
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Create app directory
+WORKDIR /app
 
-# Copier le fichier de configuration NGINX
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy production dependencies
+COPY package.json yarn.lock ./
 
-# Exposer le port 80 pour NGINX
-EXPOSE 80
-EXPOSE 443
+# Set environment to production
+ENV NODE_ENV production
 
-# Démarrer NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Install production dependencies
+RUN yarn install --production
+
+# Copy built app
+COPY --from=builder /app/dist ./dist
+
+# Expose port 8080
+EXPOSE 8080
+
+# Run the app
+CMD [ "node", "dist/src/main.js" ]
