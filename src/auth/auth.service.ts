@@ -134,7 +134,7 @@ export class AuthService {
       .join('');
     company.resetPasswordToken = randomString;
     const emailBody =
-      'Voici votre clé pour réinitialiser votre mot de passe : ' + randomString;
+      'Voici votre clé pour réinitialiser votre mot de passe : ' + randomString + '.\n Vous pouvez le réinitialiser sur https://linker-app.fr/company/reset-password';
     const emailSubject = 'Réinitialisation de mot de passe';
 
     const sendMailDto = new SendMailDto();
@@ -172,7 +172,7 @@ export class AuthService {
       .join('');
     student.resetPasswordToken = randomString;
     const emailBody =
-      'Voici votre clé pour réinitialiser votre mot de passe : ' + randomString;
+      'Voici votre clé pour réinitialiser votre mot de passe : ' + randomString + '.\n Vous pouvez le réinitialiser sur https://linker-app.fr/student/reset-password';
     const emailSubject = 'Réinitialisation de mot de passe';
 
     const sendMailDto = new SendMailDto();
