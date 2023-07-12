@@ -1,12 +1,10 @@
 name: Server build pipelines
 
 on:
-  push:
+  pull_request:
+    types: [opened, reopened]
     branches:
       - main
-      - develop
-    paths:
-      - '**'
 
 jobs:
   build:
